@@ -1,0 +1,14 @@
+---
+- name: Copy mirsg-dev cert and key
+  hosts: web
+  become: true
+  become_method: sudo
+  tasks:
+    - name: Copy cert and key
+      ansible.builtin.copy:
+        src: ./{{ item }}
+        dest: /etc/ssl/certs/{{ item }}
+        mode: 0600
+      loop:
+        - "{{ hostvars['mirsg_dev_xnat_web']['ansible_host'] }}.cert"
+        - "{{ hostvars['mirsg_dev_xnat_web']['ansible_host'] }}.key"
