@@ -1,0 +1,60 @@
+---
+- hosts: external
+  become: true
+  become_user: root
+  become_method: sudo
+  gather_facts: true
+
+  tasks:
+    - name: Install aptitude using apt
+      ansible.builtin.apt:
+        name: aptitude
+        state: latest
+        update_cache: true
+        force_apt_get: true
+
+    # n.b. it is more efficient to list packages in `name`
+    # than to use `loop` - https://docs.ansible.com/ansible/latest/collections/ansible/builtin/apt_module.html#notes
+    - name: Install required system packages
+      ansible.builtin.apt:
+        name:
+          - apt-transport-https
+          - ca-certificates
+          - curl
+          - software-properties-common
+          - python3-pip
+          - virtualenv
+          - python3-setuptools
+        state: latest
+        update_cache: true
+
+    - name: Add Docker GPG apt Key
+      ansible.builtin.apt_key:
+        url: https://download.docker.com/linux/ubuntu/gpg
+        state: present
+
+    - name: Add Docker Repository
+      ansible.builtin.apt_repository:
+        repo: deb https://download.docker.com/linux/ubuntu bionic stable
+        state: present
+
+    - name: Update apt and install docker-ce
+      ansible.builtin.apt:
+        name: docker-ce
+        update_cache: true
+        state: latest
+
+    - name: Install Docker Module for Python
+      ansible.builtin.pip:
+        name: docker
+
+    - name: Start smtp4dev container
+      community.docker.docker_container:
+        name: smtp4dev
+        hostname: smtp4dev
+        image: rnwood/smtp4dev
+        state: started
+        ports:
+          - "2525:25"
+          - "3000:80"
+        restart_policy: always
