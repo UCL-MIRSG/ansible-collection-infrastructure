@@ -1,0 +1,31 @@
+---
+- name: Determine whether we're running on RedHat 7
+  hosts: container_service_host
+  gather_facts: true
+  tasks:
+    - name: Check if we're running on RedHat 7
+      ansible.builtin.set_fact:
+        os_is_redhat_7: ansible_facts['os_family'] == "RedHat" and ansible_facts['distribution_major_version'] is version('7')
+
+- name: Provision container service host
+  hosts: container_service_host
+  become: true
+  become_user: root
+  become_method: sudo
+  gather_facts: true
+  vars:
+    install_python: "{{ install_python2 if os_is_redhat_7 else install_python3 }}"
+
+  roles:
+    - { role: package_update }
+    - { role: locale }
+    - { role: mirsg.install_python }
+    - { role: docker }
+    - {
+      role: sign_docker_client_cert,
+      hosts: "{{ xnat_container_service.clients }}",
+    }
+    - {
+      role: firewall_container_service,
+      host_ips: "{{ xnat_container_service.client_ips }}",
+    }

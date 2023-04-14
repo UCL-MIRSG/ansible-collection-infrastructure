@@ -1,0 +1,11 @@
+---
+collections:
+  - ansible.posix
+  - community.crypto
+  - community.docker
+  - community.general
+
+roles:
+  - src: https://github.com/UCL-MIRSG/ansible-role-install-python.git
+    version: 2023.02.9.0
+    name: mirsg.install_python

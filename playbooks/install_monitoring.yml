@@ -1,0 +1,45 @@
+---
+- name: Determine whether we're running on RedHat 7
+  hosts: monitoring_service
+  gather_facts: true
+  tasks:
+    - name: Check if we're running on RedHat 7
+      ansible.builtin.set_fact:
+        os_is_redhat_7: ansible_facts['os_family'] == "RedHat" and ansible_facts['distribution_major_version'] is version('7')
+
+- name: Create monitoring client CSR
+  hosts: monitoring_service
+  become: true
+  become_user: root
+  become_method: sudo
+  gather_facts: true
+
+  roles:
+    - { role: create_monitoring_client_csr, when: monitoring_service_enabled }
+
+- name: Set up monitoring service clients
+  hosts: monitoring_server
+  become: true
+  become_user: root
+  become_method: sudo
+  gather_facts: true
+  vars:
+    install_python: "{{ install_python2 if os_is_redhat_7 else install_python3 }}"
+
+  roles:
+    - { role: package_update }
+    - { role: locale }
+    - { role: mirsg.install_python }
+    - { role: docker }
+    - { role: sign_monitoring_client_cert }
+    - { role: monitoring_server }
+
+- name: Set up monitoring server
+  hosts: monitoring_service
+  become: true
+  become_user: root
+  become_method: sudo
+  gather_facts: true
+
+  roles:
+    - { role: monitoring_client, when: monitoring_service_enabled }
