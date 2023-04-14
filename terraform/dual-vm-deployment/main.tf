@@ -153,11 +153,11 @@ module "db_pg_clusterip" {
 }
 
 locals {
-  db_ssh_cluster_ip = module.db_ssh_node_port.cluster_ip
-  db_ssh_node_port = module.db_ssh_node_port.node_port[0].node_port
-  https_node_port = one([for port in module.web_http_https_node_port.node_port : port.node_port if can(regex("https", port.name))])
+  db_ssh_cluster_ip  = module.db_ssh_node_port.cluster_ip
+  db_ssh_node_port   = module.db_ssh_node_port.node_port[0].node_port
+  https_node_port    = one([for port in module.web_http_https_node_port.node_port : port.node_port if can(regex("https", port.name))])
   web_ssh_cluster_ip = module.web_ssh_node_port.cluster_ip
-  web_ssh_node_port = module.web_ssh_node_port.node_port[0].node_port
+  web_ssh_node_port  = module.web_ssh_node_port.node_port[0].node_port
 
 }
 resource "ansible_host" "db_host" {
@@ -165,10 +165,10 @@ resource "ansible_host" "db_host" {
   groups = ["common", "mirsg_dev_xnat", "db"]
 
   variables = {
-      ansible_host = "mirsg-dev.cs.ucl.ac.uk"
-      ansible_ssh_ip = local.db_ssh_cluster_ip
-      ansible_ssh_port = local.db_ssh_node_port
-      harvester_pg_svc = "dev-xnat-db-pg"
+    ansible_host     = "mirsg-dev.cs.ucl.ac.uk"
+    ansible_ssh_ip   = local.db_ssh_cluster_ip
+    ansible_ssh_port = local.db_ssh_node_port
+    harvester_pg_svc = "dev-xnat-db-pg"
   }
 }
 
@@ -177,12 +177,11 @@ resource "ansible_host" "web_host" {
   groups = ["common", "mirsg_dev_xnat", "web"]
 
   variables = {
-      ansible_host = "mirsg-dev.cs.ucl.ac.uk"
-      mirsg_dev_xnat_web_url = "https://mirsg-dev.cs.ucl.ac.uk:${local.https_node_port}"
-      harvester_cluster_base_ip = "10.52.0.0"
-      harvester_cluster_subnet_mask = "255.255.255.0"
-      ansible_ssh_ip: local.web_ssh_cluster_ip
-      ansible_ssh_port: local.web_ssh_node_port
+    ansible_host                  = "mirsg-dev.cs.ucl.ac.uk"
+    mirsg_dev_xnat_web_url        = "https://mirsg-dev.cs.ucl.ac.uk:${local.https_node_port}"
+    harvester_cluster_base_ip     = "10.52.0.0"
+    harvester_cluster_subnet_mask = "255.255.255.0"
+    ansible_ssh_ip                = local.web_ssh_cluster_ip
+    ansible_ssh_port              = local.web_ssh_node_port
   }
 }
-

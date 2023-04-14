@@ -2,7 +2,7 @@ terraform {
   required_version = ">= 0.13"
   required_providers {
     ansible = {
-      source = "ansible/ansible"
+      source  = "ansible/ansible"
       version = "1.0.0"
     }
     aws = {
