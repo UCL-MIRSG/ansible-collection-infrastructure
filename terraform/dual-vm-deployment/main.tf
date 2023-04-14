@@ -152,42 +152,37 @@ module "db_pg_clusterip" {
   target_port    = local.db_vm_data.pg_target_port
 }
 
-resource "local_file" "mirsg_dev_hosts" {
-  content = templatefile("${path.module}/templates/mirsg_dev_hosts.yml.tftpl",
-    {
-      https_node_port : one([for port in module.web_http_https_node_port.node_port : port.node_port if can(regex("https", port.name))])
-      db_ssh_cluster_ip : module.db_ssh_node_port.cluster_ip
-      db_ssh_node_port : module.db_ssh_node_port.node_port[0].node_port
-      web_ssh_cluster_ip : module.web_ssh_node_port.cluster_ip
-      web_ssh_node_port : module.web_ssh_node_port.node_port[0].node_port
-    }
-  )
-  filename = "${path.module}/../../ansible/inventories/development/mirsg_dev_hosts.yml"
+locals {
+  db_ssh_cluster_ip = module.db_ssh_node_port.cluster_ip
+  db_ssh_node_port = module.db_ssh_node_port.node_port[0].node_port
+  https_node_port = one([for port in module.web_http_https_node_port.node_port : port.node_port if can(regex("https", port.name))])
+  web_ssh_cluster_ip = module.web_ssh_node_port.cluster_ip
+  web_ssh_node_port = module.web_ssh_node_port.node_port[0].node_port
+
 }
+resource "ansible_host" "db_host" {
+  name   = "mirsg_dev_xnat_db"
+  groups = ["common", "mirsg_dev_xnat", "db"]
 
-resource "null_resource" "remote_exec" {
-  depends_on = [
-    module.web_virtual_machine
-  ]
-  provisioner "remote-exec" {
-    inline = ["sudo yum upgrade -y", "echo Done!"]
-
-    connection {
-      host        = "mirsg-dev.cs.ucl.ac.uk"
-      type        = "ssh"
-      port        = module.web_ssh_node_port.node_port[0].node_port
-      user        = var.USER_NAME
-      private_key = file("${path.module}/${var.USER_PRIVATE_KEY_FILE}")
-    }
-  }
-
-  provisioner "local-exec" {
-    command = join(" ", [
-      "ANSIBLE_HOST_KEY_CHECKING=False",
-      "ansible-playbook -u ${var.USER_NAME}",
-      "-i '${path.module}/../../ansible/inventories/development/mirsg_dev_hosts.yml'",
-      "--private-key ${path.module}/${var.USER_PRIVATE_KEY_FILE}",
-      "${path.module}/../../ansible/inventories/development/copy_mirsg_dev_cert.yml",
-    "--vault-id ${path.module}/../../ansible/inventories/development/${var.VAULT_PASSWORD_FILE}"])
+  variables = {
+      ansible_host = "mirsg-dev.cs.ucl.ac.uk"
+      ansible_ssh_ip = local.db_ssh_cluster_ip
+      ansible_ssh_port = local.db_ssh_node_port
+      harvester_pg_svc = "dev-xnat-db-pg"
   }
 }
+
+resource "ansible_host" "web_host" {
+  name   = "mirsg_dev_xnat_web"
+  groups = ["common", "mirsg_dev_xnat", "web"]
+
+  variables = {
+      ansible_host = "mirsg-dev.cs.ucl.ac.uk"
+      mirsg_dev_xnat_web_url = "https://mirsg-dev.cs.ucl.ac.uk:${local.https_node_port}"
+      harvester_cluster_base_ip = "10.52.0.0"
+      harvester_cluster_subnet_mask = "255.255.255.0"
+      ansible_ssh_ip: local.web_ssh_cluster_ip
+      ansible_ssh_port: local.web_ssh_node_port
+  }
+}
+
