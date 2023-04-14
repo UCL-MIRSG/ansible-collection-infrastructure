@@ -1,1 +1,21 @@
+.direnv
 .envrc
+.vagrant
+.venv
+.vscode
+
+# vagrant local directory
+local
+
+# Local .terraform directories and files
+**/.terraform/*
+
+
+**/.terraform.lock.hcl
+
+# .tfstate files
+**/*.tfstate
+**/*.tfstate.*
+
+# kubernetes config file
+*kubeconfig*
