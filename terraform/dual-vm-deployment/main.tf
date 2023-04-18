@@ -71,7 +71,7 @@ locals {
 
 # create database VM
 module "db_virtual_machine" {
-  source = "github.com/UCL-MIRSG/mirsg-harvester-terraform-modules//modules/virtual-machine?ref=v1.0.5"
+  source = "github.com/UCL-MIRSG/mirsg-harvester-terraform-modules//modules/virtual-machine?ref=v1.0.6"
 
   user_data = templatefile("${path.module}/templates/user_data.yml.tftpl", {
     USER_NAME : var.USER_NAME,
@@ -84,7 +84,7 @@ module "db_virtual_machine" {
 
 # create web VM
 module "web_virtual_machine" {
-  source = "github.com/UCL-MIRSG/mirsg-harvester-terraform-modules//modules/virtual-machine?ref=v1.0.5"
+  source = "github.com/UCL-MIRSG/mirsg-harvester-terraform-modules//modules/virtual-machine?ref=v1.0.6"
 
   user_data = templatefile("${path.module}/templates/user_data.yml.tftpl", {
     USER_NAME : var.USER_NAME,
@@ -97,7 +97,7 @@ module "web_virtual_machine" {
 
 # create ssh NodePort for db VM
 module "db_ssh_node_port" {
-  source = "github.com/UCL-MIRSG/mirsg-harvester-terraform-modules//modules/kubernetes-nodeport?ref=v1.0.5"
+  source = "github.com/UCL-MIRSG/mirsg-harvester-terraform-modules//modules/kubernetes-nodeport?ref=v1.0.6"
 
   vm_name      = local.db_vm_data.name
   service_name = "${local.db_vm_data.name}-ssh"
@@ -111,7 +111,7 @@ module "db_ssh_node_port" {
 
 # create ssh NodePort for web VM
 module "web_ssh_node_port" {
-  source = "github.com/UCL-MIRSG/mirsg-harvester-terraform-modules//modules/kubernetes-nodeport?ref=v1.0.5"
+  source = "github.com/UCL-MIRSG/mirsg-harvester-terraform-modules//modules/kubernetes-nodeport?ref=v1.0.6"
 
   vm_name      = local.web_vm_data.name
   service_name = "${local.web_vm_data.name}-ssh"
@@ -125,7 +125,7 @@ module "web_ssh_node_port" {
 
 # create http and https NodePort for web VM
 module "web_http_https_node_port" {
-  source = "github.com/UCL-MIRSG/mirsg-harvester-terraform-modules//modules/kubernetes-nodeport?ref=v1.0.5"
+  source = "github.com/UCL-MIRSG/mirsg-harvester-terraform-modules//modules/kubernetes-nodeport?ref=v1.0.6"
 
   vm_name      = local.web_vm_data.name
   service_name = local.web_vm_data.name
@@ -143,7 +143,7 @@ module "web_http_https_node_port" {
 
 # create PG (5432) ClusterIP for db VM
 module "db_pg_clusterip" {
-  source = "github.com/UCL-MIRSG/mirsg-harvester-terraform-modules//modules/kubernetes-clusterip?ref=v1.0.5"
+  source = "github.com/UCL-MIRSG/mirsg-harvester-terraform-modules//modules/kubernetes-clusterip?ref=v1.0.6"
 
   vm_name        = local.db_vm_data.name
   service_name   = "${local.db_vm_data.name}-pg"
@@ -155,6 +155,7 @@ module "db_pg_clusterip" {
 locals {
   db_ssh_cluster_ip  = module.db_ssh_node_port.cluster_ip
   db_ssh_node_port   = module.db_ssh_node_port.node_port[0].node_port
+  pg_service_name    = module.db_pg_clusterip.service_name
   https_node_port    = one([for port in module.web_http_https_node_port.node_port : port.node_port if can(regex("https", port.name))])
   web_ssh_cluster_ip = module.web_ssh_node_port.cluster_ip
   web_ssh_node_port  = module.web_ssh_node_port.node_port[0].node_port
@@ -168,7 +169,7 @@ resource "ansible_host" "db_host" {
     ansible_host     = "mirsg-dev.cs.ucl.ac.uk"
     ansible_ssh_ip   = local.db_ssh_cluster_ip
     ansible_ssh_port = local.db_ssh_node_port
-    harvester_pg_svc = "dev-xnat-db-pg"
+    harvester_pg_svc = local.pg_service_name
   }
 }
 
