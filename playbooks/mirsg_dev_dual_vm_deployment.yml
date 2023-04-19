@@ -61,5 +61,3 @@
       cloud.terraform.terraform:
         project_path: ../terraform/dual-vm-deployment
         state: absent
-
-
