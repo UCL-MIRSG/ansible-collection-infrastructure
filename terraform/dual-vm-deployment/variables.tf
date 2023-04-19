@@ -18,16 +18,6 @@ variable "USER_PUBLIC_KEY" {
   type        = string
 }
 
-variable "USER_PRIVATE_KEY_FILE" {
-  description = "Path to private key for OS user"
-  type        = string
-}
-
-variable "VAULT_PASSWORD_FILE" {
-  description = "Path to Ansible vault file"
-  type        = string
-}
-
 variable "OS_IMAGE_DISPLAY_NAME" {
   description = "Name of the OS being installed on the VMs as displayed in the Harvester UI."
   type        = string
