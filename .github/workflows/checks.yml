@@ -34,7 +34,7 @@ jobs:
         run: pip install ansible pre-commit
 
       - name: install ansible roles
-        run: ansible-galaxy install -r playbooks/roles/requirements.yml
+        run: ansible-galaxy install -r roles/requirements.yml
 
       - name: Install pre-commit hooks
         run: pre-commit install
