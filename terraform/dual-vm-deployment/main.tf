@@ -161,6 +161,8 @@ locals {
   web_ssh_node_port  = module.web_ssh_node_port.node_port[0].node_port
 
 }
+
+# Create Ansible inventory in state file
 resource "ansible_host" "db_host" {
   name   = "mirsg_dev_xnat_db"
   groups = ["common", "mirsg_dev_xnat", "db"]
@@ -185,4 +187,19 @@ resource "ansible_host" "web_host" {
     ansible_ssh_ip                = local.web_ssh_cluster_ip
     ansible_ssh_port              = local.web_ssh_node_port
   }
+}
+
+# Create a local Ansible inventory file - primarily for use with GHA
+resource "local_file" "mirsg_dev_hosts" {
+  content = templatefile("${path.module}/templates/mirsg_dev_hosts.yml.tftpl",
+    {
+      https_node_port : one([for port in module.web_http_https_node_port.node_port : port.node_port if can(regex("https", port.name))])
+      db_ssh_cluster_ip : module.db_ssh_node_port.cluster_ip
+      db_ssh_node_port : module.db_ssh_node_port.node_port[0].node_port
+      web_ssh_cluster_ip : module.web_ssh_node_port.cluster_ip
+      web_ssh_node_port : module.web_ssh_node_port.node_port[0].node_port
+      pg_svc : module.db_pg_clusterip.service_name
+    }
+  )
+  filename = "${path.module}/../../inventories/development/mirsg_dev_hosts.yml"
 }
