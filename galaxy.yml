@@ -16,7 +16,7 @@ readme: README.md
 # A list of the collection's content authors. Can be just the name or in the format 'Full Name <email> (url)
 # @nicks:irc/im.site#channel'
 authors:
-- Daniel Matthews <d.matthews@ucl.ac.uk>
+  - Daniel Matthews <d.matthews@ucl.ac.uk>
 
 
 ### OPTIONAL but strongly recommended
@@ -26,7 +26,7 @@ description: Collection for MIRSG infrastructure management
 # Either a single license or a list of licenses for content inside of a collection. Ansible Galaxy currently only
 # accepts L(SPDX,https://spdx.org/licenses/) licenses. This key is mutually exclusive with 'license_file'
 license:
-- BSD-3-Clause
+  - BSD-3-Clause
 
 # The path to the license file for the collection. This path is relative to the root of the collection. This key is
 # mutually exclusive with 'license'
@@ -66,4 +66,3 @@ build_ignore: []
 # 'omit_default_directives' is a boolean that controls whether the default directives are used. Mutually exclusive
 # with 'build_ignore'
 # manifest: null
-

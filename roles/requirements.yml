@@ -1,6 +1,7 @@
 ---
 collections:
   - ansible.posix
+  - cloud.terraform
   - community.crypto
   - community.docker
   - community.general

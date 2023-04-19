@@ -1,0 +1,61 @@
+# playbook to deploy VMs onto mirsg-dev.cs.ucl.ac.uk using Terraform
+---
+# Use Terraform to deploy VMs and create in-memory inventory
+- name: Dual VM deployment
+  hosts: localhost
+  vars:
+    mapping_variables:
+      host_list: terraform_var_host_list
+      ip: terraform_var_ip
+      port: terraform_var_port
+
+  tasks:
+    - name: Apply plan
+      cloud.terraform.terraform:
+        project_path: ../terraform/dual-vm-deployment
+        state: present
+        force_init: true
+        backend_config:
+          bucket: "{{ s3_bucket }}"
+          key: "{{ s3_key }}"
+
+    - name: Read outputs from state file
+      cloud.terraform.terraform_output:
+        project_path: ../terraform/dual-vm-deployment
+      register: terraform_output
+
+    - name: Print terraform_output
+      ansible.builtin.debug:
+        msg: "{{ terraform_output }}"
+
+    - name: Create in-memory inventory for web VM from Terraform outputs
+      ansible.builtin.add_host:
+        groups: web
+        name: mirsg_dev_xnat_web
+        ansible_host: mirsg-dev.cs.ucl.ac.uk
+        ansible_ssh_ip: "{{ item[mapping_variables.ip] }}"
+        ansible_ssh_port: "{{ item[mapping_variables.port] }}"
+      loop: "{{ terraform_output.outputs[mapping_variables.host_list].value }}"
+
+
+- name: Copy SSL cert and key to web VM
+  hosts: web
+  become: true
+  remote_user: "{{ ssh_user }}"
+  tasks:
+    - name: Copy cert and key
+      ansible.builtin.copy:
+        src: ./{{ item }}
+        dest: /etc/ssl/certs/{{ item }}
+        mode: 0600
+      loop:
+        - "{{ hostvars['mirsg_dev_xnat_web']['ansible_host'] }}.cert"
+        - "{{ hostvars['mirsg_dev_xnat_web']['ansible_host'] }}.key"
+
+- name: Destroy VMs
+  hosts: localhost
+  tasks:
+    - name: Destroy VMs
+      cloud.terraform.terraform:
+        project_path: ../terraform/dual-vm-deployment
+        state: absent

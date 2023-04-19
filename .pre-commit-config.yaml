@@ -34,3 +34,11 @@ repos:
     rev: v6.3.0
     hooks:
       - id: ansible-lint
+  - repo: https://github.com/antonbabenko/pre-commit-terraform
+    rev: v1.77.1
+    hooks:
+      - id: terraform_fmt
+        args:
+          - --args=-diff
+      - id: terraform_tflint
+      - id: terraform_validate

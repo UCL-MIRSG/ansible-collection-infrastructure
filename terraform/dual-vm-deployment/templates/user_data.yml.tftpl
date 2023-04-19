@@ -1,0 +1,25 @@
+#cloud-config
+##...
+package_update: true
+disable_root: false
+packages:
+  - qemu-guest-agent
+  - firewalld
+runcmd:
+  - - systemctl
+    - enable
+    - --now
+    - /bin/systemctl enable firewalld
+    - /bin/systemctl start firewalld
+    - qemu-guest-agent.service
+users:
+  ${USER_NAME}:
+    groups:
+      - "wheel"
+    sudo: ALL=(ALL) NOPASSWD:ALL
+    passwd: ${USER_PASSWORD_HASH}
+    lock_passwd: false
+    shell: /bin/bash
+    ssh_authorized_keys:
+      - ${USER_PUBLIC_KEY}
+##...
