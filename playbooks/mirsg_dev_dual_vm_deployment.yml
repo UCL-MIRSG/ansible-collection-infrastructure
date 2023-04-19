@@ -36,7 +36,6 @@
         ansible_ssh_ip: "{{ item[mapping_variables.ip] }}"
         ansible_ssh_port: "{{ item[mapping_variables.port] }}"
       loop: "{{ terraform_output.outputs[mapping_variables.host_list].value }}"
-      ignore_errors: true
 
 
 - name: Copy SSL cert and key to web VM
@@ -52,7 +51,6 @@
       loop:
         - "{{ hostvars['mirsg_dev_xnat_web']['ansible_host'] }}.cert"
         - "{{ hostvars['mirsg_dev_xnat_web']['ansible_host'] }}.key"
-      ignore_errors: true
 
 - name: Destroy VMs
   hosts: localhost
