@@ -1,0 +1,37 @@
+# roles/create_monitoring_client_csr/meta/argument_specs.yml
+---
+argument_specs:
+  # roles/create_monitoring_client_csr/tasks/main.yml entry point
+  main:
+    short_description: The main entry point for the `create_monitoring_client_csr` role.
+    options:
+      monitoring_client:
+        type: dict
+        required: true
+        description: The monitoring client arguments.
+        options:
+          cert_dir:
+            type: str
+            required: true
+            description: The folder in which the SSL cert will be created on the client.
+          owner:
+            type: str
+            required: true
+            description: The OS user that will have ownership of the cert.
+          group:
+            type: str
+            required: true
+            description: The OS group to which the `owner` belongs.
+          ssl_key_file:
+            type: str
+            required: true
+            description: The full path to the SSL private key file.
+          ssl_csr_file:
+            type: str
+            required: true
+            description: The full path to the SSL cert file.
+
+      monitoring_temp_files_cert_dir:
+        type: str
+        required: true
+        description: The temporary location on the Ansible controller where the cert and key will be stored.

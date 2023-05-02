@@ -1,0 +1,13 @@
+---
+# defaults file for roles/create_monitoring_client_csr
+monitoring_client:
+  owner: root
+  group: root
+  cert_dir: /root/monitoring_certs
+  ssl_key_file: "/root/monitoring_certs/key.pem"
+  ssl_csr_file: "/root/monitoring_certs/monitoring.csr"
+  ssl_pk8_file: "/root/monitoring_certs/monitoring.pk8"
+  ssl_cert_file: "/root/monitoring_certs/cert.pem"
+  server_ca_cert_file: "/root/monitoring_certs/ca.pem"
+
+monitoring_temp_files_cert_dir: "~/ansible_persistent_files/cserv_certificates/monitoring"
