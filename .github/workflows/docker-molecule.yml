@@ -27,10 +27,8 @@ jobs:
       fail-fast: true
       matrix:
         molecule_distro:
-          - distro: "centos7"
-            volume: ""
-          - distro: "rockylinux8"
-            volume: /sys/fs/cgroup:/sys/fs/cgroup:rw
+          - "centos7"
+          - "rockylinux8"
         collection_role:
           - docker
 
@@ -55,6 +53,5 @@ jobs:
         run: >-
           molecule --version &&
           ansible --version &&
-          MOLECULE_DISTRO=${{ matrix.molecule_distro.distro }}
-          MOLECULE_VOLUME=${{ matrix.molecule_distro.volume }}
+          MOLECULE_DISTRO=${{ matrix.molecule_distro }}
           molecule --debug test -s ${{ matrix.collection_role }}
