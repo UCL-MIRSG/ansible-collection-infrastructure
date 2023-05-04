@@ -1,0 +1,60 @@
+---
+dependency:
+  name: galaxy
+
+driver:
+  name: docker
+
+scenario:
+  name: docker
+  test_sequence:
+    - destroy
+    - syntax
+    - create
+    - converge
+    - destroy
+
+platforms:
+  - name: docker
+    image: geerlingguy/docker-${MOLECULE_DISTRO}-ansible:latest
+    command: ""
+    cgroupns_mode: host
+    privileged: true
+    pre_build_image: true
+    tmpfs:
+      - /run
+      - /tmp
+    volumes:
+      - ${MOLECULE_VOLUME:""}
+
+provisioner:
+  name: ansible
+  log: true
+  config_options:
+    defaults:
+      callbacks_enabled: profile_tasks, timer, yaml
+  inventory:
+    host_vars:
+      docker:
+        ansible_host: docker
+        ansible_ip: "172.17.0.2"
+    group_vars:
+      all:
+        xnat_container_service:
+          host: "{{ hostvars['docker']['ansible_host'] }}"
+          ip: "{{ hostvars['docker']['ansible_ip'] }}"
+          port: "2376"
+        xnat_container_service_temp_files_cert_dir: "~/ansible_persistent_files/cserv_certificates/cserv"
+  playbooks:
+    converge: converge.yml
+  env:
+    ANSIBLE_VERBOSITY: "1"
+verifier:
+  name: ansible
+  env:
+    ANSIBLE_VERBOSITY: "1"
+
+lint: |
+  set -e
+  yamllint .
+  ansible-lint .

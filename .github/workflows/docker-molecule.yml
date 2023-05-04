@@ -1,0 +1,60 @@
+name: "mirsg.infrastructure.docker"
+on:
+  push:
+    paths:
+      - 'roles/docker/**'
+      - 'molecule/docker/**'
+      - '.github/workflows/docker-molecule.yml'
+  pull_request:
+    paths:
+      - 'roles/docker/**'
+      - 'molecule/docker/**'
+      - '.github/workflows/docker-molecule.yml'
+
+defaults:
+  run:
+    working-directory: "mirsg.infrastructure"
+
+jobs:
+  molecule:
+    runs-on: ubuntu-latest
+
+    env:
+      PY_COLORS: 1
+      ANSIBLE_FORCE_COLOR: 1
+
+    strategy:
+      fail-fast: true
+      matrix:
+        molecule_distro:
+          - distro: "centos7"
+            volume: ""
+          - distro: "rockylinux8"
+            volume: /sys/fs/cgroup:/sys/fs/cgroup:rw
+        collection_role:
+          - docker
+
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v3
+        with:
+          path: mirsg.infrastructure
+
+      - name: Set up Python 3.9
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.9
+
+      - name: Install test dependencies
+        run: |
+          sudo apt-get update && sudo apt-get -y install rsync
+          python3 -m pip install --upgrade pip
+          python3 -m pip install -r ./.github/workflows/requirements.txt
+
+      - name: Run role tests
+        run: >-
+          molecule --version &&
+          ansible --version &&
+          MOLECULE_DISTRO=${{ matrix.molecule_distro.distro }}
+          MOLECULE_VOLUME=${{ matrix.molecule_distro.volume }}
+          molecule --debug test -s ${{ matrix.collection_role }}

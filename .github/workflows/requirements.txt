@@ -1,0 +1,6 @@
+ansible
+ansible-compat==3.0.2
+ansible-lint
+molecule
+molecule-plugins[docker]
+docker
