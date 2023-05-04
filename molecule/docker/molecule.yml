@@ -16,7 +16,7 @@ scenario:
 
 platforms:
   - name: docker
-    image: geerlingguy/docker-${MOLECULE_DISTRO}-ansible:latest
+    image: geerlingguy/docker-${MOLECULE_DISTRO:-centos7}-ansible:latest
     command: ""
     cgroupns_mode: host
     privileged: true
@@ -25,7 +25,7 @@ platforms:
       - /run
       - /tmp
     volumes:
-      - ${MOLECULE_VOLUME:""}
+      - ${MOLECULE_VOLUME:-""}
 
 provisioner:
   name: ansible
