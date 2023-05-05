@@ -1,15 +1,31 @@
 ---
-- name: Ensure Ansible sefcontext dependencies are installed (Python 2)
-  ansible.builtin.yum:
-    name: ["libselinux-python", "policycoreutils-python"]
-    state: installed
-  when: ansible_facts["python"]["version"]["major"] is version("2")
+- name: Check if we're running on RedHat 7
+  ansible.builtin.set_fact:
+    os_is_redhat_7: ansible_facts['os_family'] == "RedHat" and ansible_facts['distribution_major_version'] is version('7')
 
-- name: Ensure Ansible sefcontext dependencies are installed (Python 3)
+- name: Setup for RedHat 7 - install sefcontext dependencies and psycopg2
   ansible.builtin.yum:
-    name: ["python3-libselinux", "policycoreutils-python-utils"]
+    name:
+      - libselinux-python
+      - policycoreutils-python
     state: installed
-  when: ansible_facts["python"]["version"]["major"] is version("3")
+  when: os_is_redhat_7
+
+- name: Setup for RedHat 8+ - install sefcontext dependencies and psycopg2
+  ansible.builtin.yum:
+    name:
+      - python3-libselinux
+      - policycoreutils-python-utils
+    state: installed
+  when: not os_is_redhat_7
+
+- name: Set install_python variable based on the version to be installed
+  ansible.builtin.set_fact:
+    install_python: "{{ install_python2 if os_is_redhat_7 else install_python3 }}"
+
+- name: Install Python, pip, setuptools and cryptography
+  ansible.builtin.include_role:
+    name: "mirsg.install_python"
 
 - name: Ensure docker dependencies are installed
   ansible.builtin.yum:
@@ -34,14 +50,14 @@
     state: directory
     mode: 0700
 
-- name: Set custom docker service configuration
-  ansible.builtin.template:
-    src: docker.service.j2
-    dest: "{{ docker.service_file_dir }}/docker.conf"
-    owner: "root"
-    group: "root"
-    mode: 0644
-  notify: reload docker
+# - name: Set custom docker service configuration
+#   ansible.builtin.template:
+#     src: docker.service.j2
+#     dest: "{{ docker.service_file_dir }}/docker.conf"
+#     owner: "root"
+#     group: "root"
+#     mode: 0644
+#   notify: reload docker
 
 - name: Ensure docker config directory {{ docker.config_dir }} exists
   ansible.builtin.file:
@@ -64,7 +80,7 @@
   import_tasks: create_docker_server_cert.yml
   notify: restart docker
 
-- name: "Ensure docker service configuraiton is reloaded before restarting the service"
+- name: "Ensure docker service configuration is reloaded before restarting the service"
   ansible.builtin.meta: flush_handlers
 
 - name: Ensure docker daemon is running
