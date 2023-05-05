@@ -27,8 +27,10 @@ jobs:
       fail-fast: true
       matrix:
         molecule_distro:
-          - "centos7"
-          - "rockylinux8"
+          - distro: "centos:7"
+            cgroupns: "private"
+          - distro: "rockylinux:8"
+            cgroupns: "host"
         collection_role:
           - docker
 
@@ -53,5 +55,6 @@ jobs:
         run: >-
           molecule --version &&
           ansible --version &&
-          MOLECULE_DISTRO=${{ matrix.molecule_distro }}
+          MOLECULE_DISTRO=${{ matrix.molecule_distro.distro }}
+          MOLECULE_CGROUPNS_MODE=${{ matrix.molecule_distro.cgroupns }}
           molecule --debug test -s ${{ matrix.collection_role }}
