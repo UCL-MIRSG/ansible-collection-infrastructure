@@ -59,27 +59,6 @@
     mode: "0644"
   notify: Reload docker
 
-- name: Ensure docker config directory exists
-  ansible.builtin.file:
-    path: "{{ docker.config_dir }}"
-    owner: "{{ docker.owner }}"
-    group: "{{ docker.group }}"
-    state: directory
-    mode: "0700"
-
-- name: Write docker daemon configuration file
-  ansible.builtin.template:
-    src: daemon.json.j2
-    dest: "{{ docker.daemon_conf_file }}"
-    owner: "{{ docker.owner }}"
-    group: "{{ docker.group }}"
-    mode: "0640"
-  notify: Reload docker
-
-- name: Generate container server certificate
-  ansible.builtin.import_tasks: create_docker_server_cert.yml
-  notify: Restart docker
-
 - name: "Ensure docker service configuration is reloaded before restarting the service"
   ansible.builtin.meta: flush_handlers
 
