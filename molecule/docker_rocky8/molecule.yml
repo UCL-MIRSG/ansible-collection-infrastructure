@@ -38,7 +38,7 @@ provisioner:
           port: "2376"
         xnat_container_service_temp_files_cert_dir: "~/ansible_persistent_files/cserv_certificates/cserv"
   playbooks:
-    converge: ../resources/converge.yml
+    converge: ../resources/docker_converge.yml
   env:
     ANSIBLE_VERBOSITY: "1"
 verifier:
