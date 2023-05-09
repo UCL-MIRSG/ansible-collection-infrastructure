@@ -3,12 +3,12 @@ on:
   push:
     paths:
       - 'roles/docker/**'
-      - 'molecule/docker/**'
+      - 'molecule/docker**/**'
       - '.github/workflows/docker-molecule.yml'
   pull_request:
     paths:
       - 'roles/docker/**'
-      - 'molecule/docker/**'
+      - 'molecule/docker**/**'
       - '.github/workflows/docker-molecule.yml'
 
 defaults:
