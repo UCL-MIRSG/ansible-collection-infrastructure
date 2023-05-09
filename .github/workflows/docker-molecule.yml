@@ -28,7 +28,7 @@ jobs:
       matrix:
         molecule_distro:
           - distro: "centos:7"
-            cgroupns: "private"
+            cgroupns: "host"
           - distro: "rockylinux:8"
             cgroupns: "host"
         collection_role:
