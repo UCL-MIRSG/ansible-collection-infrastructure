@@ -25,8 +25,8 @@ jobs:
       fail-fast: true
       matrix:
         molecule_scenario:
-          - docker_centos7
-          - docker_rocky8
+          - centos7
+          - rocky8
 
     steps:
       - name: Check out code
