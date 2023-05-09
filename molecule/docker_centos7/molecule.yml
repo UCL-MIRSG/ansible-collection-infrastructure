@@ -1,0 +1,50 @@
+---
+dependency:
+  name: galaxy
+
+driver:
+  name: docker
+
+scenario:
+  name: docker_centos7
+  test_sequence:
+    - destroy
+    - syntax
+    - create
+    - converge
+    - destroy
+
+platforms:
+  - name: instance
+    image: centos:7
+    command: ""
+    cgroupns_mode: host
+    privileged: true
+
+provisioner:
+  name: ansible
+  log: true
+  config_options:
+    defaults:
+      callbacks_enabled: profile_tasks, timer, yaml
+  inventory:
+    group_vars:
+      all:
+        xnat_container_service:
+          host: instance
+          ip: "172.17.0.2"
+          port: "2376"
+        xnat_container_service_temp_files_cert_dir: "~/ansible_persistent_files/cserv_certificates/cserv"
+  playbooks:
+    converge: ../resources/converge.yml
+  env:
+    ANSIBLE_VERBOSITY: "1"
+verifier:
+  name: ansible
+  env:
+    ANSIBLE_VERBOSITY: "1"
+
+lint: |
+  set -e
+  yamllint .
+  ansible-lint .

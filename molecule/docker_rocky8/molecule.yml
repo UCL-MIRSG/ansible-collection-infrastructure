@@ -6,7 +6,7 @@ driver:
   name: docker
 
 scenario:
-  name: docker
+  name: docker_rocky8
   test_sequence:
     - destroy
     - syntax
@@ -16,9 +16,9 @@ scenario:
 
 platforms:
   - name: instance
-    image: ${MOLECULE_DISTRO:-centos:7}
-    command: ${MOLECULE_COMMAND:-""}
-    cgroupns_mode: ${MOLECULE_CGROUPNS_MODE:-private}
+    image: rockylinux:8
+    command: ""
+    cgroupns_mode: host
     privileged: true
     volumes:
       - /sys/fs/cgroup:/sys/fs/cgroup:rw
@@ -38,7 +38,7 @@ provisioner:
           port: "2376"
         xnat_container_service_temp_files_cert_dir: "~/ansible_persistent_files/cserv_certificates/cserv"
   playbooks:
-    converge: converge.yml
+    converge: ../resources/converge.yml
   env:
     ANSIBLE_VERBOSITY: "1"
 verifier:
