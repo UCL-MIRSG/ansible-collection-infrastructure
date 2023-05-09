@@ -35,13 +35,11 @@ jobs:
         with:
           path: |
             ${{ env.pythonLocation }}
-            ~/.ansible/collections/ansible_collections
             ~/.cache/pre-commit
             ~/.tflint.d/plugins
           key: >
             cache-${{ env.PY }}-
             ${{ hashFiles('.pre-commit-config.yaml') }}-
-            ${{ hashFiles('ansible/playbooks/roles/requirements.yml') }}-
             tflint-${{ hashFiles('.tflint.hcl') }}
 
       - name: Setup `terraform`
@@ -49,10 +47,7 @@ jobs:
 
 
       - name: install dependencies
-        run: pip install ansible pre-commit
-
-      - name: install ansible roles
-        run: ansible-galaxy install -r roles/requirements.yml
+        run: pip install pre-commit
 
       - name: Install pre-commit hooks
         run: pre-commit install
