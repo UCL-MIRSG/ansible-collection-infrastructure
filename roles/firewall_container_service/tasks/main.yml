@@ -21,7 +21,7 @@
     permanent: true
     state: disabled
 
-- name: Add {{ items }} to internal zone
+- name: Add sources to internal zone
   ansible.posix.firewalld:
     zone: internal
     source: "{{ item }}"
@@ -59,3 +59,4 @@
 - name: Drop all default connections
   ansible.builtin.command: firewall-cmd --set-default-zone=drop
   when: firewall_db_default_zone.rc != 0
+  changed_when: false

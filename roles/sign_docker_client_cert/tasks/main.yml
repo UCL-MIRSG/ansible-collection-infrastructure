@@ -5,14 +5,14 @@
     state: directory
     owner: "{{ docker.owner }}"
     group: "{{ docker.group }}"
-    mode: 0700
+    mode: "0700"
 
 - name: Generate OpenSSL client private key
   community.crypto.openssl_privatekey:
     path: "{{ docker.client_cert_dir }}/key.pem"
     owner: "{{ docker.owner }}"
     group: "{{ docker.group }}"
-    mode: 0400
+    mode: "0400"
 
 - name: Generate OpenSSL CSR for each client using private key
   community.crypto.openssl_csr:
@@ -29,7 +29,7 @@
     provider: ownca
     ownca_path: "{{ docker.ca_cert }}"
     ownca_privatekey_path: "{{ docker.ca_key }}"
-    mode: 0400
+    mode: "0400"
     owner: "{{ docker.owner }}"
     group: "{{ docker.group }}"
   loop: "{{ hosts }}"

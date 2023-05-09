@@ -43,24 +43,24 @@
 - name: Ensure docker service restarts after Docker SDK is installed
   ansible.builtin.meta: flush_handlers
 
-- name: "Create a network"
+- name: Create a network
   community.docker.docker_network:
     name: monitor-net
 
 - name: Install and configure Nginx container
-  include: install_nginx_container.yml
+  ansible.builtin.include_tasks: install_nginx_container.yml
 
 - name: Install and configure Prometheus container
-  include: install_prometheus_container.yml
+  ansible.builtin.include_tasks: install_prometheus_container.yml
 
 - name: Install and configure Blackbox Exporter container
-  include: install_blackbox_exporter_container.yml
+  ansible.builtin.include_tasks: install_blackbox_exporter_container.yml
 
 - name: Install and configure cadvisor container
-  include: install_cadvisor_container.yml
+  ansible.builtin.include_tasks: install_cadvisor_container.yml
 
 - name: Install and configure Grafana container
-  include: install_grafana_container.yml
+  ansible.builtin.include_tasks: install_grafana_container.yml
 
 - name: Install and configure alertmanager container
-  include: install_alertmanager_container.yml
+  ansible.builtin.include_tasks: install_alertmanager_container.yml

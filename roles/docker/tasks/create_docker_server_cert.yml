@@ -5,14 +5,14 @@
     state: directory
     owner: "{{ docker.owner }}"
     group: "{{ docker.group }}"
-    mode: 0700
+    mode: "0700"
 
 - name: Generate CA private key
   community.crypto.openssl_privatekey:
     path: "{{ docker.ca_key }}"
     owner: "{{ docker.owner }}"
     group: "{{ docker.group }}"
-    mode: 0400
+    mode: "0400"
 
 - name: Generate CA CSR
   community.crypto.openssl_csr:
@@ -31,7 +31,7 @@
     provider: selfsigned
     owner: "{{ docker.owner }}"
     group: "{{ docker.group }}"
-    mode: 0400
+    mode: "0400"
   notify: restart docker
 
 - name: Generate server private key
@@ -39,7 +39,7 @@
     path: "{{ docker.server_key }}"
     owner: "{{ docker.owner }}"
     group: "{{ docker.group }}"
-    mode: 0400
+    mode: "0400"
 
 - name: Generate server CSR
   community.crypto.openssl_csr:
@@ -57,7 +57,7 @@
     ownca_privatekey_path: "{{ docker.ca_key }}"
     owner: "{{ docker.owner }}"
     group: "{{ docker.group }}"
-    mode: 0400
+    mode: "0400"
   notify: restart docker
 
 - name: Copy server certificate

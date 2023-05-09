@@ -1,5 +1,6 @@
 ---
-- hosts: external
+- name: Configure container service host
+  hosts: external
   become: true
   become_user: root
   become_method: sudo

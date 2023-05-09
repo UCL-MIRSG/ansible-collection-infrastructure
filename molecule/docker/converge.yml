@@ -6,7 +6,7 @@
 
   pre_tasks:
     - name: Wait for systemd to complete initialization.  # noqa 303
-      command: systemctl is-system-running
+      ansible.builtin.command: systemctl is-system-running
       register: systemctl_status
       until: >
         'running' in systemctl_status.stdout or
@@ -18,4 +18,4 @@
       failed_when: systemctl_status.rc > 1
 
   roles:
-    - role:  mirsg.infrastructure.docker
+    - role: mirsg.infrastructure.docker

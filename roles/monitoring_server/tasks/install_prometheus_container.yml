@@ -1,11 +1,11 @@
 ---
-- name: Ensure prometheus data directory {{ prometheus.external_data_dir }} exists
+- name: Ensure prometheus data directory exists
   ansible.builtin.file:
     path: "{{ prometheus.external_data_dir }}"
     owner: "{{ monitoring_server.owner }}"
     group: "{{ monitoring_server.group }}"
     state: directory
-    mode: 0700
+    mode: "0700"
 
 - name: Copy server cert to prometheus bind mount
   ansible.builtin.copy:
@@ -13,7 +13,7 @@
     dest: "{{ prometheus.external_data_dir }}/ca.pem"
     owner: "{{ monitoring_server.owner }}"
     group: "{{ monitoring_server.group }}"
-    mode: 0644
+    mode: "0644"
   notify:
     - restart prometheus
 
@@ -23,7 +23,7 @@
     dest: "{{ prometheus.external_data_dir }}/rules.yml"
     owner: "{{ monitoring_server.owner }}"
     group: "{{ monitoring_server.group }}"
-    mode: 0644
+    mode: "0644"
   notify:
     - restart prometheus
 
@@ -32,7 +32,7 @@
     src: templates/prometheus.yml.j2
     dest: "{{ prometheus.external_data_dir }}/prometheus.yml"
     owner: root
-    mode: 0644
+    mode: "0644"
   notify:
     - restart prometheus
 

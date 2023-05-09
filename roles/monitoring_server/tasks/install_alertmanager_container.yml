@@ -1,18 +1,18 @@
 ---
-- name: Ensure alertmanager data directory {{ alertmanager.external_data_dir }} exists
+- name: Ensure alertmanager data directory exists
   ansible.builtin.file:
     path: "{{ alertmanager.external_data_dir }}"
     owner: "{{ monitoring_server.owner }}"
     group: "{{ monitoring_server.group }}"
     state: directory
-    mode: 0700
+    mode: "0700"
 
 - name: Copy alertmanager config file
   ansible.builtin.template:
     src: templates/alertmanager.yml.j2
     dest: "{{ alertmanager.external_data_dir }}/alertmanager.yml"
     owner: root
-    mode: 0644
+    mode: "0644"
 
 - name: Start alertmanager container
   community.docker.docker_container:

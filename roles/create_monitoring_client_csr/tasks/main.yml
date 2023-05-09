@@ -5,14 +5,14 @@
     state: directory
     owner: "{{ monitoring_client.owner }}"
     group: "{{ monitoring_client.group }}"
-    mode: 0700
+    mode: "0700"
 
 - name: Generate OpenSSL private key
   community.crypto.openssl_privatekey:
     path: "{{ monitoring_client.ssl_key_file }}"
     owner: "{{ monitoring_client.owner }}"
     group: "{{ monitoring_client.group }}"
-    mode: 0400
+    mode: "0400"
   register: new_monitoring_client_private_key_generated
 
 - name: Generate OpenSSL CSR
