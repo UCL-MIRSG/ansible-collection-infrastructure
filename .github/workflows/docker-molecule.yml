@@ -29,8 +29,10 @@ jobs:
         molecule_distro:
           - distro: "centos:7"
             cgroupns: "host"
+            command: "/usr/lib/systemd/systemd"
           - distro: "rockylinux:8"
             cgroupns: "host"
+            command: ""
         collection_role:
           - docker
 
@@ -57,4 +59,5 @@ jobs:
           ansible --version &&
           MOLECULE_DISTRO=${{ matrix.molecule_distro.distro }}
           MOLECULE_CGROUPNS_MODE=${{ matrix.molecule_distro.cgroupns }}
+          MOLECULE_COMMAND=${{ matrix.molecule_distro.command }}
           molecule --debug test -s ${{ matrix.collection_role }}
