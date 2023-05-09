@@ -30,19 +30,18 @@ jobs:
       - name: set PY
         run: echo "PY=$(python -VV | sha256sum | cut -d' ' -f1)" >> $GITHUB_ENV
 
-      - name: Install the infrastructure collection
-        run: ansible-galaxy collection install .
-
       - name: cache stuff
         uses: actions/cache@v3
         with:
           path: |
             ${{ env.pythonLocation }}
+            ~/.ansible/collections/ansible_collections
             ~/.cache/pre-commit
             ~/.tflint.d/plugins
           key: >
             cache-${{ env.PY }}-
             ${{ hashFiles('.pre-commit-config.yaml') }}-
+            ${{ hashFiles('ansible/playbooks/roles/requirements.yml') }}-
             tflint-${{ hashFiles('.tflint.hcl') }}
 
       - name: Setup `terraform`
@@ -50,7 +49,13 @@ jobs:
 
 
       - name: install dependencies
-        run: pip install pre-commit
+        run: pip install ansible pre-commit
+
+      - name: Install the infrastructure collection
+        run: ansible-galaxy collection install .
+
+      - name: install ansible roles
+        run: ansible-galaxy install -r roles/requirements.yml
 
       - name: Install pre-commit hooks
         run: pre-commit install
