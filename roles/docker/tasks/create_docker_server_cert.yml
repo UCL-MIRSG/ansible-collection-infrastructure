@@ -32,7 +32,7 @@
     owner: "{{ docker.owner }}"
     group: "{{ docker.group }}"
     mode: "0400"
-  notify: restart docker
+  notify: Restart docker
 
 - name: Generate server private key
   community.crypto.openssl_privatekey:
@@ -58,7 +58,7 @@
     owner: "{{ docker.owner }}"
     group: "{{ docker.group }}"
     mode: "0400"
-  notify: restart docker
+  notify: Restart docker
 
 - name: Copy server certificate
   ansible.builtin.fetch:

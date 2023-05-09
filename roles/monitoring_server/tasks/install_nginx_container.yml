@@ -38,13 +38,13 @@
       src: "{{ monitoring_server.ssl.server_key }}",
       dest: "{{ nginx_monitoring_server.ssl_key_file }}",
     }
-  notify: restart nginx
+  notify: Restart nginx
 
 - name: Generate Diffie-Hellman (DH) parameters with bits - {{ diffie_helman_size_bits }}.
   community.crypto.openssl_dhparam:
     path: "{{ nginx_monitoring_server.dh_params_file }}"
     size: "{{ diffie_helman_size_bits }}"
-  notify: restart nginx
+  notify: Restart nginx
 
 - name: Copy nginx config file
   ansible.builtin.template:
@@ -54,7 +54,7 @@
     group: "{{ nginx_monitoring_server.group }}"
     mode: "0644"
     force: true
-  notify: restart nginx
+  notify: Restart nginx
 
 - name: Start Nginx container
   community.docker.docker_container:

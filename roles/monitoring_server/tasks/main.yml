@@ -38,7 +38,7 @@
   ansible.builtin.pip:
     name:
       - docker
-  notify: restart docker
+  notify: Restart docker
 
 - name: Ensure docker service restarts after Docker SDK is installed
   ansible.builtin.meta: flush_handlers
