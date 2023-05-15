@@ -6,7 +6,7 @@ driver:
   name: docker
 
 scenario:
-  name: docker_centos7
+  name: centos7
   test_sequence:
     - destroy
     - syntax

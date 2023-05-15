@@ -6,13 +6,13 @@ driver:
   name: docker
 
 scenario:
-  name: docker_rocky8
+  name: rocky8
   test_sequence:
     - destroy
     - syntax
     - create
     - converge
-    # - destroy
+    - destroy
 
 platforms:
   - name: instance
