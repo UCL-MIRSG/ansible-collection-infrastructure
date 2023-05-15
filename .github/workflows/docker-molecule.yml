@@ -11,4 +11,13 @@ on:
 
 jobs:
   molecule:
+    strategy:
+      fail-fast: true
+      matrix:
+        molecule_scenario:
+          - centos7
+          # - rocky8
     uses: ./.github/workflows/run-molecule-test.yml
+    with:
+      role: "docker"
+      scenario: ${{ matrix.molecule_scenario }}
