@@ -37,7 +37,7 @@ jobs:
         run: |
           sudo apt-get update && sudo apt-get -y install rsync
           python3 -m pip install --upgrade pip
-          python3 -m pip install ansible ansible-lint molecule molecule-plugins[docker] docker
+          python3 -m pip install ansible ansible-lint molecule molecule-plugins[docker] docker requests==2.29.0
 
       - name: Run role tests
         run: >-
