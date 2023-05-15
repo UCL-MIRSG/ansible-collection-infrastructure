@@ -39,6 +39,10 @@ jobs:
           python3 -m pip install --upgrade pip
           python3 -m pip install ansible ansible-lint molecule molecule-plugins[docker] docker requests==2.29.0
 
+      - name: Install role dependencies
+        run: |
+          ansible-galaxy install -r roles /requirements.yml
+
       - name: Run role tests
         run: >-
           cd roles/${{ inputs.role }} &&
