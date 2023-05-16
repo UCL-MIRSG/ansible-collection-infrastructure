@@ -29,14 +29,6 @@ provisioner:
   config_options:
     defaults:
       callbacks_enabled: profile_tasks, timer, yaml
-  inventory:
-    group_vars:
-      all:
-        xnat_container_service:
-          host: instance
-          ip: "172.17.0.2"
-          port: "2376"
-        xnat_container_service_temp_files_cert_dir: "~/ansible_persistent_files/cserv_certificates/cserv"
   playbooks:
     converge: ../resources/converge.yml
   env:

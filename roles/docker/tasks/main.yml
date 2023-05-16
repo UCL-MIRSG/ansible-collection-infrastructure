@@ -3,7 +3,7 @@
   ansible.builtin.set_fact:
     os_is_redhat_7: "{{ ansible_facts['os_family'] == 'RedHat' and ansible_distribution_major_version == '7' }}"
 
-- name: Setup for RedHat 7 - install sefcontext dependencies and psycopg2
+- name: Setup for RedHat 7 - install sefcontext dependencies
   ansible.builtin.yum:
     name:
       - libselinux-python
@@ -11,21 +11,13 @@
     state: installed
   when: os_is_redhat_7
 
-- name: Setup for RedHat 8+ - install sefcontext dependencies and psycopg2
+- name: Setup for RedHat 8+ - install sefcontext dependencies
   ansible.builtin.yum:
     name:
       - python3-libselinux
       - policycoreutils-python-utils
     state: installed
   when: not os_is_redhat_7
-
-- name: Set install_python variable based on the version to be installed
-  ansible.builtin.set_fact:
-    install_python: "{{ install_python2 if os_is_redhat_7 else install_python3 }}"
-
-- name: Install Python, pip, setuptools and cryptography
-  ansible.builtin.include_role:
-    name: "mirsg.install_python"
 
 - name: Ensure docker dependencies are installed
   ansible.builtin.yum:
