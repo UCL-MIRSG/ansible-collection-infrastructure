@@ -10,10 +10,6 @@ on:
         required: true
         type: string
 
-defaults:
-  run:
-    working-directory: "mirsg.infrastructure"
-
 jobs:
   molecule:
     runs-on: ubuntu-latest
@@ -25,8 +21,6 @@ jobs:
     steps:
       - name: Check out code
         uses: actions/checkout@v3
-        with:
-          path: mirsg.infrastructure
 
       - name: Set up Python 3.9
         uses: actions/setup-python@v2
@@ -41,7 +35,11 @@ jobs:
 
       - name: Install role dependencies
         run: |
-          ansible-galaxy install -r roles /requirements.yml
+          ansible-galaxy install -r roles/requirements.yml
+
+      - name: Install the collection
+        run: |
+          ansible-galaxy collection install .
 
       - name: Run role tests
         run: >-
