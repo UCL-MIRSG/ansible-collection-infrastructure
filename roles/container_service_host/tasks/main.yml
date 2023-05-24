@@ -1,7 +1,7 @@
 ---
 - name: Check if we're running on RedHat 7
   ansible.builtin.set_fact:
-    os_is_redhat_7: ansible_facts['os_family'] == "RedHat" and ansible_facts['distribution_major_version'] is version('7')
+    os_is_redhat_7: "{{ ansible_facts['os_family'] == 'RedHat' and ansible_facts['distribution_major_version'] is version('7') }}"
 
 - name: Setup for RedHat 7 - install sefcontext dependencies and psycopg2
   ansible.builtin.yum:
