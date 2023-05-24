@@ -52,7 +52,7 @@ jobs:
         run: pip install ansible pre-commit
 
       - name: Install the infrastructure collection
-        run: ansible-galaxy collection install .
+        run: ansible-galaxy collection install . --force
 
       - name: install ansible roles
         run: ansible-galaxy install -r roles/requirements.yml
