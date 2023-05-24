@@ -1,24 +1,4 @@
 ---
-- name: Check if we're running on RedHat 7
-  ansible.builtin.set_fact:
-    os_is_redhat_7: "{{ ansible_facts['os_family'] == 'RedHat' and ansible_distribution_major_version == '7' }}"
-
-- name: Setup for RedHat 7 - install sefcontext dependencies
-  ansible.builtin.yum:
-    name:
-      - libselinux-python
-      - policycoreutils-python
-    state: installed
-  when: os_is_redhat_7
-
-- name: Setup for RedHat 8+ - install sefcontext dependencies
-  ansible.builtin.yum:
-    name:
-      - python3-libselinux
-      - policycoreutils-python-utils
-    state: installed
-  when: not os_is_redhat_7
-
 - name: Ensure docker dependencies are installed
   ansible.builtin.yum:
     name: ["yum-utils", "device-mapper-persistent-data", "lvm2", "epel-release"]
