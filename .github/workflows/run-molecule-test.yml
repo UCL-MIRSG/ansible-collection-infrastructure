@@ -39,7 +39,7 @@ jobs:
 
       - name: Install the collection
         run: |
-          ansible-galaxy collection install .
+          ansible-galaxy collection install . --force
 
       - name: Run role tests
         run: >-
