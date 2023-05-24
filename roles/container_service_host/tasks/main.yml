@@ -1,0 +1,95 @@
+---
+- name: Ensure docker is installed
+  ansible.builtin.yum:
+    name: ["docker-ce", "docker-ce-cli", "containerd.io"]
+    state: installed
+
+- name: Ensure docker config directory exists
+  ansible.builtin.file:
+    path: "{{ docker.config_dir }}"
+    owner: "{{ docker.owner }}"
+    group: "{{ docker.group }}"
+    state: directory
+    mode: "0700"
+
+- name: Write docker daemon configuration file
+  ansible.builtin.template:
+    src: daemon.json.j2
+    dest: "{{ docker.daemon_conf_file }}"
+    owner: "{{ docker.owner }}"
+    group: "{{ docker.group }}"
+    mode: "0640"
+  notify: Reload docker
+
+- name: Ensure docker cert dir exists
+  ansible.builtin.file:
+    path: "{{ xnat_container_service.cert_dir }}"
+    state: directory
+    owner: "{{ docker.owner }}"
+    group: "{{ docker.group }}"
+    mode: "0700"
+
+- name: Generate CA private key
+  community.crypto.openssl_privatekey:
+    path: "{{ xnat_container_service.ca_key }}"
+    owner: "{{ docker.owner }}"
+    group: "{{ docker.group }}"
+    mode: "0400"
+
+- name: Generate CA CSR
+  community.crypto.openssl_csr:
+    path: "{{ xnat_container_service.ca_csr }}"
+    privatekey_path: "{{ xnat_container_service.ca_key }}"
+    common_name: "{{ xnat_container_service.host }}"
+    subject_alt_name: "IP:{{ xnat_container_service.ip }}"
+    basic_constraints_critical: true
+    basic_constraints: ["CA:TRUE"]
+
+- name: Generate self-signed CA certificate
+  community.crypto.x509_certificate:
+    path: "{{ xnat_container_service.ca_cert }}"
+    privatekey_path: "{{ xnat_container_service.ca_key }}"
+    csr_path: "{{ xnat_container_service.ca_csr }}"
+    provider: selfsigned
+    owner: "{{ docker.owner }}"
+    group: "{{ docker.group }}"
+    mode: "0400"
+  notify: Restart docker
+
+- name: Generate server private key
+  community.crypto.openssl_privatekey:
+    path: "{{ xnat_container_service.server_key }}"
+    owner: "{{ docker.owner }}"
+    group: "{{ docker.group }}"
+    mode: "0400"
+
+- name: Generate server CSR
+  community.crypto.openssl_csr:
+    path: "{{ xnat_container_service.server_csr }}"
+    privatekey_path: "{{ xnat_container_service.server_key }}"
+    common_name: "{{ xnat_container_service.host }}"
+    subject_alt_name: "IP:{{ xnat_container_service.ip }}"
+
+- name: Generate server certificate
+  community.crypto.x509_certificate:
+    path: "{{ xnat_container_service.server_cert }}"
+    csr_path: "{{ xnat_container_service.server_csr }}"
+    provider: ownca
+    ownca_path: "{{ xnat_container_service.ca_cert }}"
+    ownca_privatekey_path: "{{ xnat_container_service.ca_key }}"
+    owner: "{{ docker.owner }}"
+    group: "{{ docker.group }}"
+    mode: "0400"
+  notify: Restart docker
+
+- name: Copy server certificate
+  ansible.builtin.fetch:
+    src: "{{ xnat_container_service.ca_cert }}"
+    dest: "{{ xnat_container_service_temp_files_cert_dir }}/ca.pem"
+    flat: true
+
+- name: Ensure docker daemon is running
+  ansible.builtin.service:
+    name: "{{ docker.service_name }}"
+    state: started
+    enabled: true
