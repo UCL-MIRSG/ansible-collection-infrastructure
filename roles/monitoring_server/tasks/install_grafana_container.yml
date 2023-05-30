@@ -1,10 +1,10 @@
 ---
-- name: Ensure grafana's directory {{ grafana.external_data_dir }} exists
+- name: Ensure grafana's directory exists
   ansible.builtin.file:
     path: "{{ grafana.external_data_dir }}"
     owner: "{{ monitoring_server.owner }}"
     group: "{{ monitoring_server.group }}"
-    mode: 0700
+    mode: "0700"
     state: directory
   notify: "restart grafana"
 
@@ -14,7 +14,7 @@
     state: directory
     owner: "{{ monitoring_server.owner }}"
     group: "{{ monitoring_server.group }}"
-    mode: 0744
+    mode: "0744"
 
 - name: Copy datasource file to grafana
   ansible.builtin.template:
@@ -22,7 +22,7 @@
     dest: "{{ grafana.external_datasource }}"
     owner: "{{ monitoring_server.owner }}"
     group: "{{ monitoring_server.group }}"
-    mode: 0644
+    mode: "0644"
   notify: "restart grafana"
 
 - name: Start Grafana container

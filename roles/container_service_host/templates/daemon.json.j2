@@ -1,0 +1,7 @@
+{
+   "hosts": ["tcp://{{ xnat_container_service.ip }}:{{ xnat_container_service.port }}", "unix:///var/run/docker.sock"],
+   "tlsverify": true,
+   "tlscacert": "{{ xnat_container_service.ca_cert }}",
+   "tlscert": "{{ xnat_container_service.server_cert }}",
+   "tlskey": "{{ xnat_container_service.server_key }}"
+ }

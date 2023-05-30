@@ -1,22 +1,22 @@
-- name: restart prometheus
+- name: Restart prometheus
   community.docker.docker_container:
     name: "{{ prometheus.container_name }}"
     state: started
     restart: true
 
-- name: restart grafana
+- name: Restart grafana
   community.docker.docker_container:
     name: "{{ grafana.container_name }}"
     state: started
     restart: true
 
-- name: restart nginx
+- name: Restart nginx
   community.docker.docker_container:
     name: nginx
     state: started
     restart: true
 
-- name: restart docker
+- name: Restart docker
   ansible.builtin.service:
     name: "{{ docker.service_name }}"
     state: restarted

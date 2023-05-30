@@ -1,0 +1,23 @@
+name: "mirsg.infrastructure.container_service_host"
+on:
+  push:
+    paths:
+      - 'roles/container_service_host/**'
+      - '.github/workflows/container-service-host-molecule.yml'
+  pull_request:
+    paths:
+      - 'roles/container_service_host/**'
+      - '.github/workflows/container-service-host-molecule.yml'
+
+jobs:
+  molecule:
+    strategy:
+      fail-fast: true
+      matrix:
+        molecule_scenario:
+          - centos7
+          - rocky8
+    uses: ./.github/workflows/run-molecule-test.yml
+    with:
+      role: "container_service_host"
+      scenario: ${{ matrix.molecule_scenario }}

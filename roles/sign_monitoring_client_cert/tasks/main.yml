@@ -24,7 +24,7 @@
     state: directory
     owner: "{{ monitoring_server.cert_owner }}"
     group: "{{ monitoring_server.cert_group }}"
-    mode: 0700
+    mode: "0700"
 
 - name: Copy monitoring client CSRs to server
   ansible.builtin.copy:
@@ -32,7 +32,7 @@
     dest: "{{ monitoring_server.client_cert_dir }}/{{ item }}.csr"
     owner: "{{ monitoring_server.cert_owner }}"
     group: "{{ monitoring_server.cert_group }}"
-    mode: 0600
+    mode: "0600"
   loop: "{{ monitoring_service_clients }}"
 
 - name: Generate client certificates signed by server CA
@@ -42,7 +42,7 @@
     provider: ownca
     ownca_path: "{{ docker.ca_cert }}"
     ownca_privatekey_path: "{{ docker.ca_key }}"
-    mode: 0400
+    mode: "0400"
     owner: "{{ monitoring_server.cert_owner }}"
     group: "{{ monitoring_server.cert_group }}"
   loop: "{{ monitoring_service_clients }}"
@@ -60,5 +60,5 @@
     dest: "{{ monitoring_temp_files_cert_dir }}/ca.pem"
     owner: "{{ monitoring_server.cert_owner }}"
     group: "{{ monitoring_server.cert_group }}"
-    mode: 0600
+    mode: "0600"
     flat: true

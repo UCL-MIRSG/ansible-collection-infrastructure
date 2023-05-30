@@ -1,10 +1,10 @@
 ---
-- name: restart docker
+- name: Restart docker
   ansible.builtin.service:
     name: "{{ docker.service_name }}"
     state: restarted
 
-- name: reload docker
+- name: Reload docker
   ansible.builtin.service:
     name: "{{ docker.service_name }}"
     state: reloaded

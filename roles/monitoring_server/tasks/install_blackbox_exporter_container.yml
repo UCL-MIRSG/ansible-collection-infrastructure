@@ -1,11 +1,11 @@
 ---
-- name: Ensure blackbox_exporter data directory {{ blackbox_exporter.external_data_dir }} exists
+- name: Ensure blackbox_exporter data directory exists
   ansible.builtin.file:
     path: "{{ blackbox_exporter.external_data_dir }}"
     owner: "{{ monitoring_server.owner }}"
     group: "{{ monitoring_server.group }}"
     state: directory
-    mode: 0700
+    mode: "0700"
 
 - name: Copy blackbox_exporter config file
   ansible.builtin.template:
@@ -13,7 +13,7 @@
     dest: "{{ blackbox_exporter.external_data_dir }}/blackbox-exporter.yml"
     owner: "{{ monitoring_server.owner }}"
     group: "{{ monitoring_server.group }}"
-    mode: 0644
+    mode: "0644"
 
 - name: Start blackbox_exporter container
   community.docker.docker_container:

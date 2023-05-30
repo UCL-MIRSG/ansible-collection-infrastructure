@@ -5,7 +5,7 @@
     group: "{{ monitoring_client.group }}"
     path: "{{ node_exporter.install_dir }}"
     state: directory
-    mode: 0777
+    mode: "0777"
 
 - name: Download and unarchive node_exporter
   ansible.builtin.unarchive:
@@ -23,7 +23,7 @@
     dest: "{{ item.dest }}"
     owner: "{{ monitoring_client.owner }}"
     group: "{{ monitoring_client.group }}"
-    mode: 0600
+    mode: "0600"
     remote_src: true
   with_items:
     - {
@@ -39,7 +39,7 @@
   ansible.builtin.template:
     src: templates/node_exporter.service.j2
     dest: "{{ node_exporter.service_config_file }}"
-    mode: 0644
+    mode: "0644"
   when: ansible_service_mgr == "systemd"
 
 - name: Start and enable node_exporter
@@ -74,7 +74,7 @@
   ansible.builtin.template:
     src: templates/node_exporter_web.yml.j2
     dest: "{{ node_exporter.web_config_file }}"
-    mode: 0644
+    mode: "0644"
   notify:
     - restart node_exporter
 
