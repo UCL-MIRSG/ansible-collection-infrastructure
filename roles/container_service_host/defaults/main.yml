@@ -19,5 +19,3 @@ docker:
   daemon_conf_file: "/etc/docker/daemon.json"
   service_file_dir: "/etc/systemd/system/docker.service.d"
   service_name: "docker"
-
-xnat_container_service_temp_files_cert_dir: "~/ansible_persistent_files/cserv_certificates/cserv"
