@@ -3,7 +3,7 @@
 	url = git@github.com:UCL-MIRSG/ansible-role-docker.git
 [submodule "roles/postgresql"]
 	path = roles/postgresql
-	url = https://github.com/UCL-MIRSG/ansible-role-postgresql.git
+	url = git@github.com:UCL-MIRSG/ansible-role-postgresql.git
 [submodule "roles/firewalld"]
 	path = roles/firewalld
-	url = https://github.com/UCL-MIRSG/ansible-role-firewalld.git
+	url = git@github.com:UCL-MIRSG/ansible-role-firewalld.git
