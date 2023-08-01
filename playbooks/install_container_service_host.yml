@@ -10,8 +10,6 @@
 - name: Provision container service host
   hosts: container_service_host
   become: true
-  become_user: root
-  become_method: sudo
   gather_facts: true
   vars:
     install_python: "{{ install_python2 if os_is_redhat_7 else install_python3 }}"

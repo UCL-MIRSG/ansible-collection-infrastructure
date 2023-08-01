@@ -2,6 +2,7 @@ exclude_paths:
   - .github/
   - roles/docker
   - roles/firewalld
+  - roles/postgresql
 
 warn_list:
   - command-instead-of-module
