@@ -9,3 +9,6 @@ warn_list:
   - package-latest
 
 var_naming_pattern: "^[a-z_][a-z0-9_]*$"
+
+skip_list:
+  - var-naming
