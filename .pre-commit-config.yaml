@@ -1,6 +1,6 @@
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v4.3.0
+    rev: v4.4.0
     hooks:
       - id: check-added-large-files
       - id: check-case-conflict
@@ -14,7 +14,7 @@ repos:
         args: [--fix=lf]
       - id: trailing-whitespace
   - repo: https://github.com/Lucas-C/pre-commit-hooks
-    rev: v1.3.0
+    rev: v1.5.1
     hooks:
       - id: forbid-tabs
   - repo: https://github.com/pre-commit/mirrors-prettier
@@ -26,16 +26,12 @@ repos:
     rev: 0.23.0
     hooks:
       - id: check-github-workflows
-  - repo: https://github.com/shellcheck-py/shellcheck-py
-    rev: v0.8.0.4
-    hooks:
-      - id: shellcheck
   - repo: https://github.com/ansible-community/ansible-lint.git
-    rev: v6.15.0
+    rev: v6.16.2
     hooks:
       - id: ansible-lint
   - repo: https://github.com/antonbabenko/pre-commit-terraform
-    rev: v1.77.1
+    rev: v1.80.0
     hooks:
       - id: terraform_fmt
         args:
