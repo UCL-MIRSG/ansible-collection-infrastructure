@@ -7,3 +7,6 @@
 [submodule "roles/firewalld"]
 	path = roles/firewalld
 	url = git@github.com:UCL-MIRSG/ansible-role-firewalld.git
+[submodule "roles/install_python"]
+	path = roles/install_python
+	url = git@github.com:UCL-MIRSG/ansible-role-install-python.git
