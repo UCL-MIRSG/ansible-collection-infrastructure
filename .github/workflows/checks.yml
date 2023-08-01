@@ -3,21 +3,21 @@ name: checks
 on: [push, pull_request]
 
 jobs:
-  build:
+  pre_commit:
     runs-on: ubuntu-latest
     steps:
-      - name: checkout source
+      - name: Checkout source
         uses: actions/checkout@v3
 
-      - name: set up python
+      - name: Set up python
         uses: actions/setup-python@v4
         with:
           python-version: '3.10'
 
-      - name: set PY
+      - name: Set PY
         run: echo "PY=$(python -VV | sha256sum | cut -d' ' -f1)" >> $GITHUB_ENV
 
-      - name: cache stuff
+      - name: Cache stuff
         uses: actions/cache@v3
         with:
           path: |
@@ -29,13 +29,13 @@ jobs:
             ${{ hashFiles('.pre-commit-config.yaml') }}-
             ${{ hashFiles('ansible/playbooks/roles/requirements.yml') }}
 
-      - name: install dependencies
+      - name: Install dependencies
         run: pip install ansible pre-commit
 
       - name: Install the infrastructure collection
         run: ansible-galaxy collection install . --force
 
-      - name: install ansible roles
+      - name: Install ansible roles
         run: ansible-galaxy install -r roles/requirements.yml
 
       - name: Install pre-commit hooks
@@ -46,5 +46,5 @@ jobs:
       # the files being changed by pre-commit should be just those that are
       # being committed - provided that people are using the pre-commit hook to
       # format their code.
-      - name: run pre-commit
+      - name: Run pre-commit
         run: pre-commit run --all-files --color always
