@@ -14,19 +14,6 @@ jobs:
         with:
           python-version: '3.10'
 
-      - name: Setup TFLint
-        uses: terraform-linters/setup-tflint@v3
-        with:
-          tflint_version: v0.44.1
-
-      - name: Show version
-        run: tflint --version
-
-      - name: Init TFLint
-        run: tflint --init
-        env:
-          GITHUB_TOKEN: ${{ github.token }}
-
       - name: set PY
         run: echo "PY=$(python -VV | sha256sum | cut -d' ' -f1)" >> $GITHUB_ENV
 
@@ -37,16 +24,10 @@ jobs:
             ${{ env.pythonLocation }}
             ~/.ansible/collections/ansible_collections
             ~/.cache/pre-commit
-            ~/.tflint.d/plugins
           key: >
             cache-${{ env.PY }}-
             ${{ hashFiles('.pre-commit-config.yaml') }}-
-            ${{ hashFiles('ansible/playbooks/roles/requirements.yml') }}-
-            tflint-${{ hashFiles('.tflint.hcl') }}
-
-      - name: Setup `terraform`
-        uses: hashicorp/setup-terraform@main
-
+            ${{ hashFiles('ansible/playbooks/roles/requirements.yml') }}
 
       - name: install dependencies
         run: pip install ansible pre-commit
