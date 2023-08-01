@@ -2,8 +2,6 @@
 - name: Update container service TLS
   hosts: container_service_host
   become: true
-  become_user: root
-  become_method: sudo
   gather_facts: true
 
   roles:

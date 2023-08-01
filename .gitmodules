@@ -1,6 +1,9 @@
 [submodule "roles/docker"]
 	path = roles/docker
 	url = git@github.com:UCL-MIRSG/ansible-role-docker.git
+[submodule "roles/postgresql"]
+	path = roles/postgresql
+	url = https://github.com/UCL-MIRSG/ansible-role-postgresql.git
 [submodule "roles/firewalld"]
 	path = roles/firewalld
-	url = https://github.com/UCL-MIRSG/ansible-collection-infrastructure.git
+	url = https://github.com/UCL-MIRSG/ansible-role-firewalld.git

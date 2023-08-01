@@ -2,8 +2,14 @@ exclude_paths:
   - .github/
   - roles/docker
   - roles/firewalld
+  - roles/postgresql
 
 warn_list:
   - command-instead-of-module
   - no-handler
   - package-latest
+
+var_naming_pattern: "^[a-z_][a-z0-9_]*$"
+
+skip_list:
+  - var-naming
