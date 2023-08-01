@@ -7,3 +7,5 @@ warn_list:
   - command-instead-of-module
   - no-handler
   - package-latest
+
+var_naming_pattern: "^[a-z_][a-z0-9_]*$"
