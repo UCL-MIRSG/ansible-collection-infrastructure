@@ -1,6 +1,7 @@
 exclude_paths:
   - .github/
   - roles/docker
+  - roles/firewalld
 
 warn_list:
   - command-instead-of-module
