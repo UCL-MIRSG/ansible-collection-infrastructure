@@ -3,6 +3,7 @@ exclude_paths:
   - roles/docker
   - roles/firewalld
   - roles/postgresql
+  - roles/ssl_certificates
 
 warn_list:
   - command-instead-of-module
