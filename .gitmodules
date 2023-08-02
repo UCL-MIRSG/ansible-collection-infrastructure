@@ -14,5 +14,5 @@
 	path = roles/ssl_certificates
 	url = git@github.com:UCL-MIRSG/ansible-role-ssl-certificates.git
 [submodule "roles/java"]
-	path = roles/java
+	path = roles/install_java
 	url = git@github.com:UCL-MIRSG/ansible-role-install-java.git

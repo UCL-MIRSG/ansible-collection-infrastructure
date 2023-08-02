@@ -25,7 +25,7 @@
   roles:
     - { role: package_update }
     - { role: locale }
-    - { role: mirsg.install_python }
+    - { role: install_python }
     - { role: docker }
     - { role: sign_monitoring_client_cert }
     - { role: monitoring_server }
