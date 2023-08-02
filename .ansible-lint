@@ -4,6 +4,7 @@ exclude_paths:
   - roles/firewalld
   - roles/postgresql
   - roles/ssl_certificates
+  - roles/java
 
 warn_list:
   - command-instead-of-module
