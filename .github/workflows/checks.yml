@@ -35,9 +35,6 @@ jobs:
       - name: Install the infrastructure collection
         run: ansible-galaxy collection install . --force
 
-      - name: Install ansible roles
-        run: ansible-galaxy install -r roles/requirements.yml
-
       - name: Install pre-commit hooks
         run: pre-commit install
 
