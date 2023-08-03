@@ -1,0 +1,23 @@
+name: "mirsg.infrastructure.create_monitoring_client_csr"
+on:
+  push:
+    paths:
+      - 'roles/container_service_host/**'
+      - '.github/workflows/create-monitoring-client-csr-molecule.yml'
+  pull_request:
+    paths:
+      - 'roles/create_monitoring_client_csr/**'
+      - '.github/workflows/create-monitoring-client-csr-molecule.yml'
+
+jobs:
+  molecule:
+    strategy:
+      fail-fast: true
+      matrix:
+        molecule_scenario:
+          - centos7
+          - rocky8
+    uses: ./.github/workflows/run-molecule-test.yml
+    with:
+      role: "create_monitoring_client_csr"
+      scenario: ${{ matrix.molecule_scenario }}
