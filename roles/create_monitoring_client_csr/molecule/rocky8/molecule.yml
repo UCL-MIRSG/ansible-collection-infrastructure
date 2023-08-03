@@ -1,21 +1,9 @@
 ---
 dependency:
   name: galaxy
-  options:
-    role-file: molecule/resources/requirements.yml
 
 driver:
   name: docker
-
-scenario:
-  name: rocky8
-  test_sequence:
-    - destroy
-    - syntax
-    - create
-    - prepare
-    - converge
-    - destroy
 
 platforms:
   - name: instance
