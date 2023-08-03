@@ -1,0 +1,26 @@
+---
+node_exporter_version: 1.1.2
+
+monitoring_client:
+  owner: root
+  group: root
+  cert_dir: /root/monitoring_certs
+  ssl_key_file: "/root/monitoring_certs/key.pem"
+  ssl_csr_file: "/root/monitoring_certs/monitoring.csr"
+  ssl_pk8_file: "/root/monitoring_certs/monitoring.pk8"
+  ssl_cert_file: "/root/monitoring_certs/cert.pem"
+  server_ca_cert_file: "/root/monitoring_certs/ca.pem"
+
+monitoring_temp_files_cert_dir: "~/ansible_persistent_files/cserv_certificates/monitoring"
+
+node_exporter:
+  binary_url: >
+    https://github.com/prometheus/node_exporter/releases/download/v
+    {{ node_exporter_version }}/node_exporter-
+    {{ node_exporter_version }}.linux-amd64.tar.gz"
+  install_dir: "/usr/bin/node_exporter"
+  service_config_file: "/etc/systemd/system/node_exporter.service"
+  web_config_file: /usr/bin/node_exporter/web.yml
+  port: 9100
+  ssl_key_file: "/usr/bin/node_exporter/node_exporter.key"
+  ssl_cert_file: "/usr/bin/node_exporter/node_exporter.crt"
