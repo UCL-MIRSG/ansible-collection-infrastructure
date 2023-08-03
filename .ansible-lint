@@ -6,6 +6,7 @@ exclude_paths:
   - roles/ssl_certificates
   - roles/install_java
   - roles/install_python
+  - roles/tomcat
 
 warn_list:
   - command-instead-of-module
