@@ -16,3 +16,6 @@
 [submodule "roles/java"]
 	path = roles/install_java
 	url = git@github.com:UCL-MIRSG/ansible-role-install-java.git
+[submodule "roles/tomcat"]
+	path = roles/tomcat
+	url = git@github.com:UCL-MIRSG/ansible-role-tomcat.git
