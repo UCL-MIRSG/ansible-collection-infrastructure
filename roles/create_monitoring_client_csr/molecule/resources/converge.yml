@@ -18,4 +18,4 @@
       failed_when: systemctl_status.rc > 1
 
   roles:
-    - role: create_monitoring_client_csr
+    - role: mirsg.infrastructure.create_monitoring_client_csr
