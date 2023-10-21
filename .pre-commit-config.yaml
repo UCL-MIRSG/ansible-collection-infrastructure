@@ -23,7 +23,7 @@ repos:
       - id: prettier
         exclude: ".yml$"
   - repo: https://github.com/python-jsonschema/check-jsonschema
-    rev: 0.23.3
+    rev: 0.27.0
     hooks:
       - id: check-github-workflows
   - repo: https://github.com/ansible-community/ansible-lint.git
