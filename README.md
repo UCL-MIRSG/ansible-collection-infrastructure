@@ -1,3 +1,7 @@
+# This repository has been archived
+
+Please use UCL-MIRSG/ansible-collection-infra instead, which has the roles defined as part of the Collection rather than as submodules.
+
 # Infrastructure
 
 Playbooks and roles to set-up non-XNAT medical imaging research software-related infrastructure
